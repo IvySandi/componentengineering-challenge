@@ -1,0 +1,133 @@
+Rezerv Frontend Engineering Assessment - Part 2
+Reusable Data Table Project Presentation
+
+Project Summary
+This project is a self-contained Next.js mini app for a fitness studio dashboard. It demonstrates a reusable, fully typed DataTable component built from scratch, without TanStack Table, AG Grid, MUI DataGrid, Ant Design Table, or any other table/grid library.
+
+Main User Scenario
+Studio staff manage a class timetable. The table lists fitness classes as parent rows and lets staff expand each class to review attendee records. The same table component is also reused for a separate member billing dataset to prove that the API is generic and not hard-coded to timetable data.
+
+Implemented Views
+1. Timetable tab
+   - Server-side pagination
+   - Server-side sorting
+   - On-demand attendee fetching when a row expands
+   - Per-row child loading and child error state
+   - Initial loading, empty, and simulated error states
+
+2. Inline tab
+   - Client-side pagination
+   - Client-side sorting
+   - Inline child rows bundled with parent class rows
+   - Smooth expand and collapse behavior
+
+3. Members tab
+   - Second, differently shaped dataset
+   - Server-side pagination
+   - Server-side sorting
+   - Reuses the same DataTable generic component
+
+Technical Stack
+- Next.js 15
+- React 19
+- TypeScript
+- CSS with custom properties
+- Mock browser-side API with artificial latency
+- No backend required
+- No table/grid library used
+
+Folder Structure
+- src/app
+  Next.js app router entry, layout, page, and global styling.
+
+- src/components/ui/DataTable.tsx
+  Reusable generic table component.
+
+- src/hooks/useDataTableDemo.tsx
+  One hook file for demo-specific table state, server calls, and column definitions.
+
+- src/lib/api/mock.api.ts
+  Mock API behavior for timetable, attendee, and member endpoints.
+
+- src/lib/api/mock-data.ts
+  Static generated mock datasets and reusable mock data factories.
+
+- src/types/data-table.type.ts
+  One type file for table contracts, row models, pagination, sorting, and API response types.
+
+Reusable Table API
+The DataTable is generic over parent and child row types:
+
+DataTable<T, C>
+
+Important props:
+- data: current rows to render
+- columns: column definitions
+- getRowId: stable row key generator
+- sort and onSortChange: controlled sorting support
+- pagination and onPaginationChange: controlled pagination support
+- manualSorting: parent supplies sorted data
+- manualPagination: parent supplies current page and total count
+- childRows: inline or lazy child row configuration
+- loading, error, emptyMessage: table states
+
+Column Definition Design
+Each column supports:
+- id
+- header
+- accessor
+- custom cell renderer
+- sortable flag
+- sortAccessor for local sorting
+- width and minWidth
+- pinned left column
+- alignment
+
+Server-Side Strategy
+In server mode, the DataTable does not sort or paginate internally. It emits sort and pagination changes to the parent. The parent calls the mock API and supplies the next rows and total count back to the table. This models a production API contract where the backend owns ordering and slicing.
+
+Client-Side Strategy
+In client mode, the table owns its internal sort and pagination state. It sorts the full dataset locally and slices rows for the active page. This mode is used by the Inline tab.
+
+Expandable Rows
+The childRows prop supports two modes:
+- getChildren(row): inline child rows already exist on the parent object.
+- fetchChildren(row): child rows are loaded lazily when the parent row expands.
+
+The expanded panel spans the table width and uses a smooth max-height and opacity transition. Loading, empty, and error states are handled at the child-row level.
+
+Sticky Column and Responsiveness
+The first business column is pinned using position: sticky. Expandable tables also pin the expand control column, then offset the pinned business column by 48px. This removes the horizontal-scroll glitch in Timetable and Inline tabs.
+
+The table is 100% width on desktop. Column tracks use minmax sizing so columns stretch to fill available desktop space and fall back to horizontal scrolling on smaller screens.
+
+Theme
+The UI uses a blue SaaS-style theme with restrained status colors. Primary actions, active tabs, sort indicators, focus colors, and loading accents use the blue palette.
+
+Accessibility Notes
+- Semantic table markup is preserved.
+- Sortable headers use buttons.
+- Headers expose aria-sort.
+- Expand controls expose aria-expanded and descriptive labels.
+- Loading state uses aria-busy and child loading uses role=status.
+
+Performance Notes
+- Sorting and pagination are memoized in client mode.
+- Server-mode pages render only the current page.
+- Stable grid dimensions prevent layout shifting.
+- Animations use opacity, transform, and max-height only for small expanded panels.
+- prefers-reduced-motion is respected.
+
+Tradeoffs
+- Virtualization is not included because the server-mode flow pages data before rendering.
+- Sorting is single-column for clarity.
+- Mock API runs in the browser but preserves production-like request and response boundaries.
+- Child content renders as a nested grid inside the expanded panel, keeping the parent table API generic.
+
+How To Run
+1. npm install
+2. npm run dev
+3. Open http://127.0.0.1:3000
+
+How To Build
+npm run build
