@@ -17,8 +17,8 @@ const defaultPagination: PaginationState = {
   pageSize: 8
 };
 
-const expanderColumnWidth = 48;
-const indexColumnWidth = 64;
+const expanderColumnTrack = "var(--expander-col-width)";
+const indexColumnTrack = "var(--index-col-width)";
 
 export function DataTable<T, C = never>({
   data,
@@ -53,26 +53,18 @@ export function DataTable<T, C = never>({
   const activeSort = sort !== undefined ? sort : internalSort;
   const activePagination = pagination !== undefined ? pagination : internalPagination;
   const canExpand = Boolean(childRows);
-  const utilityColumnsWidth =
-    (canExpand ? expanderColumnWidth : 0) +
-    (showIndex ? indexColumnWidth : 0);
-  const pinnedOffset = utilityColumnsWidth;
 
   const tableLayout = useMemo(() => {
     const columnTracks = columns.map((column) => getColumnTrack(column));
-    const minWidth =
-      columns.reduce((total, column) => total + getColumnMinWidth(column), 0) +
-      utilityColumnsWidth;
     const utilityTracks = [
-      canExpand ? `${expanderColumnWidth}px` : "",
-      showIndex ? `${indexColumnWidth}px` : ""
+      canExpand ? expanderColumnTrack : "",
+      showIndex ? indexColumnTrack : ""
     ].filter(Boolean);
 
     return {
-      gridTemplateColumns: [...utilityTracks, ...columnTracks].join(" "),
-      minWidth
+      gridTemplateColumns: [...utilityTracks, ...columnTracks].join(" ")
     };
-  }, [canExpand, columns, showIndex, utilityColumnsWidth]);
+  }, [canExpand, columns, showIndex]);
 
   const sortedData = useMemo(() => {
     if (manualSorting || !activeSort) {
@@ -216,7 +208,6 @@ export function DataTable<T, C = never>({
   return (
     <section
       className={`tableShell ${canExpand ? "hasExpander" : ""}`}
-      style={{ "--pinned-offset": `${pinnedOffset}px` } as CSSProperties}
       aria-busy={loading}
     >
       <div
@@ -226,7 +217,14 @@ export function DataTable<T, C = never>({
           setIsScrolled(event.currentTarget.scrollLeft > 0);
         }}
       >
-        <table className="dataTable" style={{ minWidth: tableLayout.minWidth }}>
+        <table
+          className="dataTable"
+          style={
+            {
+              "--table-grid-template": tableLayout.gridTemplateColumns
+            } as CSSProperties
+          }
+        >
           <thead>
             <tr style={{ gridTemplateColumns: tableLayout.gridTemplateColumns }}>
               {canExpand ? (

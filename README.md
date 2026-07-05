@@ -1,29 +1,42 @@
-# Rezerv Frontend Engineering Assessment - Part 2
+# Rezerv Component Engineering Challenge
 
-Reusable, typed data table for a fitness studio timetable dashboard. The app is built with Next.js, React, and TypeScript, with mock API calls and artificial latency to model production server-side pagination, server-side sorting, and on-demand child-row loading.
+Reusable, typed data table for a fitness studio timetable dashboard. The app is built with Next.js, React, and TypeScript, with mock API calls with client-side/server-side pagination, client-side/server-side sorting, and on-demand child-row loading.
 
-## Setup
+# Tech Stack
 
-```bash
+- Next.js App Router
+- React and TypeScript
+- CSS, SCSS
+
+
+# Getting Started
+
 npm install
+
+
+# Start the local development server:
+
 npm run dev
-```
 
-Open `http://localhost:3000`.
+Open [http://localhost:3000] in your browser.
 
-Production build:
+# Scripts
 
 ```bash
-npm run build
+npm run dev     
+npm run build    
+npm run start    
+npm run lint     
 ```
 
-## What Is Included
+
+# What Is Included
 
 - `Timetable`: class timetable using server-side sorting and server-side pagination. Attendees are fetched lazily when a class is expanded.
 - `Inline`: same class data shape using client-side sorting and pagination with attendee rows bundled directly into each parent row.
 - `Members`: a differently shaped dataset using the same generic table API in controlled server mode.
 
-## Component API
+# Component API
 
 The table is implemented in `src/components/ui/DataTable.tsx` and is generic over parent and child rows:
 
@@ -58,27 +71,25 @@ Column definitions describe the table instead of hard-coding fields:
 - `pinned`: pins a column to the left.
 - `align`: left, center, or right alignment.
 
-## Client vs Server Strategy
+# Client vs Server Strategy
 
 Sorting and pagination support both uncontrolled and controlled modes.
 
 Client mode:
 
-- Omit `sort`, `pagination`, `manualSorting`, and `manualPagination`.
 - The table owns sort/page state and transforms the full dataset locally.
 - Used by the `Inline` demo.
 
 Server mode:
 
-- Pass `sort`, `onSortChange`, `manualSorting`, `pagination`, `onPaginationChange`, `manualPagination`, and `totalRows`.
-- The table emits state changes and renders the page supplied by the parent.
-- Static mock datasets live in `src/lib/api/mock-data.ts`.
+- Using `sort`, `onSortChange`, `manualSorting`, `pagination`, `onPaginationChange`, `manualPagination`, and `totalRows`.
+- The table include state changes and renders the page supplied by the parent.
+- Static mock datasets are written in `src/lib/api/mock-data.ts`.
 - Mock API functions in `src/lib/api/mock.api.ts` apply sorting, slicing, total counts, and latency.
 - Used by `Timetable` and `Members`.
 
-The table clamps out-of-range pages and ignores invalid sort keys by leaving server/client data stable.
 
-## Expandable Rows
+# Expandable Rows
 
 Both expansion modes use the same `childRows` API:
 
@@ -87,23 +98,22 @@ Both expansion modes use the same `childRows` API:
 
 Expanded content spans the full table width and uses a max-height/opacity transition. Empty child lists, loading rows, and fetch errors have distinct states.
 
-## Sticky Column
+# Sticky Column
 
 Pinned columns use CSS `position: sticky` and a left offset that accounts for the expand control column. The scroll container tracks horizontal scroll and adds a divider shadow when content passes underneath the pinned column. The table keeps horizontal scrolling on narrow viewports so the pinned class/member column remains usable.
 
-## State Management
+# State Management
 
-Local React state is enough for this assessment because table state is view-local and serializable:
+Local React state is used for this assessment because table state is view-local and serializable:
 
 - Parent views own controlled server state.
 - The reusable table owns uncontrolled client state and per-row expansion state.
-- Fetch effects guard against stale responses when sort/page changes quickly.
+- Keeps fetch results up to date when sort/page changes quickly.
 - Demo-specific state, column definitions, and data loading are grouped in `src/hooks/useDataTableDemo.tsx`.
 - Shared row and table contracts are grouped in `src/types/data-table.type.ts`.
 
 
-
-## Tradeoffs And Assumptions
+# Tradeoffs And Assumptions
 
 - The mock API lives in the browser for simplicity, but its shape mirrors page/sort endpoints.
 - Sorting supports one active column at a time.

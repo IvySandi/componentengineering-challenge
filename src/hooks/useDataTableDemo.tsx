@@ -163,7 +163,7 @@ function useClassColumns(): ColumnDef<FitnessClass>[] {
         accessor: "className",
         sortable: true,
         pinned: "left",
-        width: 220,
+        width: "minmax(var(--class-col-min), 1.35fr)",
         cell: (row) => (
           <span className="classCell">
             <span>{row.className}</span>
@@ -176,13 +176,13 @@ function useClassColumns(): ColumnDef<FitnessClass>[] {
         header: "Instructor",
         accessor: "instructor",
         sortable: true,
-        width: 170
+        width: "minmax(var(--instructor-col-min), 1fr)"
       },
       {
         id: "time",
         header: "Time",
         sortable: true,
-        width: 160,
+        width: "minmax(var(--time-col-min), 0.95fr)",
         sortAccessor: (row) => row.startsAt,
         cell: (row) => `${row.startsAt} - ${row.endsAt}`
       },
@@ -191,7 +191,7 @@ function useClassColumns(): ColumnDef<FitnessClass>[] {
         header: "Attendance",
         sortable: true,
         align: "right",
-        width: 140,
+        width: "minmax(var(--attendance-col-min), 0.72fr)",
         sortAccessor: (row) => row.enrolled,
         cell: (row) => `${row.enrolled} / ${row.capacity}`
       },
@@ -200,7 +200,7 @@ function useClassColumns(): ColumnDef<FitnessClass>[] {
         header: "Status",
         accessor: "status",
         sortable: true,
-        width: 150,
+        width: "minmax(var(--status-col-min), 0.8fr)",
         cell: (row) => <StatusBadge status={row.status} />
       }
     ],
@@ -215,18 +215,18 @@ function useAttendeeColumns(): ColumnDef<Attendee>[] {
         id: "memberName",
         header: "Member",
         accessor: "memberName",
-        width: 220
+        width: "minmax(var(--child-name-col-min), 1.3fr)"
       },
       {
         id: "paymentType",
         header: "Payment",
         accessor: "paymentType",
-        width: 160
+        width: "minmax(var(--child-payment-col-min), 0.85fr)"
       },
       {
         id: "bookingStatus",
         header: "Booking",
-        width: 160,
+        width: "minmax(var(--child-status-col-min), 0.85fr)",
         cell: (row) => <StatusBadge status={row.bookingStatus} />
       }
     ],
@@ -243,14 +243,14 @@ function useMemberColumns(): ColumnDef<Member>[] {
         accessor: "name",
         sortable: true,
         pinned: "left",
-        width: 220
+        width: "minmax(var(--member-col-min), 1.35fr)"
       },
       {
         id: "plan",
         header: "Plan",
         accessor: "plan",
         sortable: true,
-        width: 150
+        width: "minmax(var(--plan-col-min), 0.85fr)"
       },
       {
         id: "visitsThisMonth",
@@ -258,21 +258,21 @@ function useMemberColumns(): ColumnDef<Member>[] {
         accessor: "visitsThisMonth",
         sortable: true,
         align: "center",
-        width: 120
+        width: "minmax(var(--visits-col-min), 0.55fr)"
       },
       {
         id: "nextBillingDate",
         header: "Next billing",
         accessor: "nextBillingDate",
         sortable: true,
-        width: 170
+        width: "minmax(var(--billing-col-min), 0.95fr)"
       },
       {
         id: "status",
         header: "Status",
         accessor: "status",
         sortable: true,
-        width: 140,
+        width: "minmax(var(--member-status-col-min), 0.8fr)",
         cell: (row) => <StatusBadge status={row.status} />
       }
     ],

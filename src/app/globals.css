@@ -15,6 +15,22 @@
   --red: #a33b32;
   --red-soft: #fae7e4;
   --shadow: 0 18px 50px rgba(21, 64, 120, 0.1);
+  --expander-col-width: 44px;
+  --index-col-width: 52px;
+  --pinned-offset: calc(var(--expander-col-width) + var(--index-col-width));
+  --class-col-min: 190px;
+  --instructor-col-min: 142px;
+  --time-col-min: 134px;
+  --attendance-col-min: 112px;
+  --status-col-min: 124px;
+  --member-col-min: 188px;
+  --plan-col-min: 116px;
+  --visits-col-min: 82px;
+  --billing-col-min: 138px;
+  --member-status-col-min: 112px;
+  --child-name-col-min: 180px;
+  --child-payment-col-min: 120px;
+  --child-status-col-min: 126px;
 }
 
 * {
@@ -169,6 +185,7 @@ h2 {
 
 .dataTable {
   width: 100%;
+  min-width: max-content;
   border-collapse: collapse;
 }
 
@@ -181,6 +198,7 @@ h2 {
 .dataTable tr {
   display: grid;
   width: 100%;
+  grid-template-columns: var(--table-grid-template);
 }
 
 .dataTable th,
@@ -242,7 +260,7 @@ td.expanderCell {
 .hasExpander .indexHeader,
 .hasExpander .indexCell {
   position: sticky;
-  left: 48px;
+  left: var(--expander-col-width);
   z-index: 5;
 }
 
@@ -427,6 +445,7 @@ th.pinnedColumn {
 .childGrid {
   display: grid;
   width: 100%;
+  grid-template-columns: var(--child-grid-template);
   border: 1px solid var(--line);
   border-radius: 8px;
   overflow: hidden;
@@ -503,19 +522,28 @@ th.pinnedColumn {
 }
 
 .stateRow {
-  display: block !important;
+  display: grid !important;
+  width: 100%;
+  grid-template-columns: 1fr !important;
 }
 
 .stateRow td {
-  display: table-cell;
+  display: block;
+  width: 100%;
+  min-height: 0;
   padding: 0;
 }
 
 .stateBox {
-  display: grid;
+  width: 100%;
   min-height: 180px;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
   color: var(--muted);
+  text-align: center;
+  white-space: normal;
 }
 
 .errorState {
@@ -574,6 +602,24 @@ th.pinnedColumn {
 }
 
 @media (max-width: 760px) {
+  :root {
+    --expander-col-width: 40px;
+    --index-col-width: 44px;
+    --class-col-min: 148px;
+    --instructor-col-min: 112px;
+    --time-col-min: 112px;
+    --attendance-col-min: 92px;
+    --status-col-min: 104px;
+    --member-col-min: 148px;
+    --plan-col-min: 92px;
+    --visits-col-min: 66px;
+    --billing-col-min: 112px;
+    --member-status-col-min: 96px;
+    --child-name-col-min: 148px;
+    --child-payment-col-min: 96px;
+    --child-status-col-min: 104px;
+  }
+
   .appShell {
     gap: 12px;
     padding: 12px 10px;
@@ -601,6 +647,39 @@ th.pinnedColumn {
 
   .actions {
     flex-wrap: wrap;
+  }
+
+  .dataTable th,
+  .dataTable td {
+    min-height: 52px;
+    padding: 10px 9px;
+    font-size: 0.84rem;
+  }
+
+  .dataTable th {
+    min-height: 44px;
+    font-size: 0.68rem;
+  }
+
+  .sortButton {
+    gap: 5px;
+  }
+
+  .sortGlyph {
+    width: 18px;
+    height: 18px;
+    flex-basis: 18px;
+  }
+
+  .statusBadge {
+    min-height: 23px;
+    padding: 0 7px;
+    font-size: 0.7rem;
+  }
+
+  .iconButton {
+    width: 26px;
+    height: 26px;
   }
 
   .childGridWrapper {
