@@ -107,7 +107,7 @@ Pinned columns use CSS `position: sticky` and a left offset that accounts for th
 Local React state is used for this assessment because table state is view-local and serializable:
 
 - Parent views own controlled server state.
-- The reusable table owns uncontrolled client state and per-row expansion state.
+- I kept expansion state inside the table because it's purely a UI concern. This lets parent pages focus only on data fetching and server state.
 - Keeps fetch results up to date when sort/page changes quickly.
 - Demo-specific state, column definitions, and data loading are grouped in `src/hooks/useDataTableDemo.tsx`.
 - Shared row and table contracts are grouped in `src/types/data-table.type.ts`.
@@ -116,6 +116,6 @@ Local React state is used for this assessment because table state is view-local 
 # Tradeoffs And Assumptions
 
 - The mock API lives in the browser for simplicity, but its shape mirrors page/sort endpoints.
-- Sorting supports one active column at a time.
+- I limited sorting to a single active column since that's sufficient for the mock API and keeps the component API simpler. 
 - Child rows render as a nested grid inside the expanded panel rather than additional table body rows, keeping the parent table generic and accessible.
-- Virtualization is not included; the server-mode demos page data before rendering, which keeps interaction smooth for the assessment scope.
+- I considered virtualization, but decided not to include it because the server-side examples already paginate the data. Adding virtualization would increase complexity without providing much benefit for this assessment.
